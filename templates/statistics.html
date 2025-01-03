@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Statistics</title>
+</head>
+<body>
+{% include "header_admin.html" %}
+<div class="d-flex justify-content-center align-items-center">
+    <div class="box bg-white rounded-4 shadow p-4 text-center align-items-center" style="width: 3000px">
+        <h1>Statistics</h1>
+        <div class="d-flex justify-content-between mt-5 mb-5">
+            <div class="card rounded-3 me-3" style="width: 500px;background-color: #DCFCE7">
+                <div class="card-header">Students</div>
+                <div class="card-body">
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                </div>
+            </div>
+            <div class="card rounded-3 me-3" style="width: 500px;background-color: #DBEAFE">
+                <div class="card-header">Instructors</div>
+                <div class="card-body">
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                </div>
+            </div>
+            <div class="card rounded-3 me-3" style="width: 500px;background-color: #F3E8FF">
+                <div class="card-header">Courses</div>
+                <div class="card-body">
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
