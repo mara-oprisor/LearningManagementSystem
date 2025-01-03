@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Home</title>
+</head>
+<body>
+    {% block navbar %}{% endblock %}
+    <div class="d-flex flex-column align-items-center">
+        <header class="bg-white rounded-4 shadow text-center p-4 mt-3 w-100" style="max-width: 900px;">
+            <h1 class="text-primary">Welcome, {{user.name}}!</h1>
+            <p class="text-secondary">Your personalized learning dashboard.</p>
+        </header>
+
+        <main class="bg-white rounded-4 shadow p-4 mt-4 d-flex flex-column align-items-center w-100" style="max-width: 900px;">
+            <section class="mb-4 w-100">
+                <h2 class="text-primary">Notifications</h2>
+                <ul class="list-group shadow-sm">
+                    <li class="list-group-item">Assignment due: Math Homework - Jan 10, 2025</li>
+                    <li class="list-group-item">Upcoming quiz: Science - Jan 15, 2025</li>
+                    <li class="list-group-item">New course available: Creative Writing</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

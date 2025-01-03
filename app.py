@@ -132,16 +132,16 @@ def home_admin():
     return render_template("statistics.html")
 
 
-@app.route("/home")
+@app.route("/home-student")
 @student_only
 def home_student():
-    return "ggg"
+    return render_template("home_student.html", user=current_user)
 
 
-@app.route("/home")
+@app.route("/home-instructor")
 @instructor_only
 def home_instructor():
-    return "ggg"
+    return render_template("home_instructor.html", user=current_user)
 
 
 if __name__ == '__main__':
