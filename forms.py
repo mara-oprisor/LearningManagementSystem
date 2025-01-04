@@ -16,5 +16,4 @@ class ProfileForm(FlaskForm):
     phone_nr = StringField("Phone Number", validators=[Regexp(r'^0[1-9][0-9]{8}$', message="Invalid phone number.")])
     age = StringField("Age", validators=[Regexp(r'^[1-9][0-9]$')])
     username = StringField("Username", validators=[DataRequired()])
-    password = StringField("Password", validators=[DataRequired()])
-    submit = SubmitField("Update Field")
+    submit = SubmitField("Update Profile")
