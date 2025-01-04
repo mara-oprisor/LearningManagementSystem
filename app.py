@@ -134,9 +134,9 @@ def home():
     if current_user.status == "admin":
         return render_template("statistics.html", user=current_user)
     elif current_user.status == "instr":
-        return render_template("home_instructor.html", user=current_user)
+        return render_template("home.html", user=current_user, navbar="header_instructor.html")
     elif current_user.status == "student":
-        return render_template("home_student.html", user=current_user)
+        return render_template("home.html", user=current_user, navbar="header_student.html")
     else:
         abort(403)
 

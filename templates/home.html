@@ -8,7 +8,7 @@
     <title>Home</title>
 </head>
 <body>
-    {% block navbar %}{% endblock %}
+    {% include navbar %}
     <div class="d-flex flex-column align-items-center">
         <header class="bg-white rounded-4 shadow text-center p-4 mt-3 w-100" style="max-width: 900px;">
             <h1 class="text-primary">Welcome, {{user.name}}!</h1>
