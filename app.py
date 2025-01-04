@@ -84,11 +84,11 @@ def log_in():
             login_user(user)
 
             if user.status == "admin":
-                return redirect(url_for('home_admin'))
+                return redirect(url_for('home'))
             elif user.status == "instr":
-                return redirect(url_for('home_instructor'))
+                return redirect(url_for('home'))
             else:
-                return redirect(url_for('home_student'))
+                return redirect(url_for('home'))
 
     return render_template("login.html", form=form)
 
@@ -127,21 +127,18 @@ def student_only(f):
 
 
 @app.route("/home")
-@admin_only
-def home_admin():
-    return render_template("statistics.html")
+def home():
+    if not current_user.is_authenticated:
+        return redirect(url_for('log_in'))
 
-
-@app.route("/home-student")
-@student_only
-def home_student():
-    return render_template("home_student.html", user=current_user)
-
-
-@app.route("/home-instructor")
-@instructor_only
-def home_instructor():
-    return render_template("home_instructor.html", user=current_user)
+    if current_user.status == "admin":
+        return render_template("statistics.html", user=current_user)
+    elif current_user.status == "instr":
+        return render_template("home_instructor.html", user=current_user)
+    elif current_user.status == "student":
+        return render_template("home_student.html", user=current_user)
+    else:
+        abort(403)
 
 
 if __name__ == '__main__':
