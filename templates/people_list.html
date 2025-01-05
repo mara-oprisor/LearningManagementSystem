@@ -20,6 +20,7 @@
                 <th scope="col">Name</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                     <td>{{ person.name }}</td>
                     <td><a href="{{ url_for('view_profile', user_id=person.id) }}">See profile</a></td>
                     <td><a href="{{ url_for('change_password', user_id=person.id) }}">Change Password</a></td>
+                    <td><a href="{{ url_for('delete_user', user_id=person.id) }}">Delete User</a></td>
             </tr>
             {% endfor %}
             </tbody>

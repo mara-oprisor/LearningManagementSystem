@@ -244,6 +244,19 @@ def view_profile(user_id):
     return render_template("view_profile.html", user=user)
 
 
+@app.route('/delete_user/<int:user_id>')
+@admin_only
+def delete_user(user_id):
+    user = db.get_or_404(User, user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    if user.status == "student":
+        return redirect(url_for('see_all_students'))
+    elif user.status == "instr":
+        return redirect(url_for('see_all_instructors'))
+
+
 @app.route('/logout', methods=["GET", "POST"])
 def log_out():
     logout_user()
