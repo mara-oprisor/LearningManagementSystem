@@ -51,6 +51,16 @@ class User(UserMixin, db.Model):
     status: Mapped[str] = mapped_column(String(20), nullable=False)
 
     account = relationship("UserAccount", back_populates="user", uselist=False, cascade="all, delete-orphan")
+    teaching_course = relationship("Course", back_populates="instructor", cascade="all, delete-orphan")
+
+
+class Course(db.Model):
+    __tablename__ = "course"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    instructor_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("user.id"))
+
+    instructor = relationship("User", back_populates="teaching_course")
 
 
 with app.app_context():
