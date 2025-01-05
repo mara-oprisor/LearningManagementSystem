@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
-from forms import LoginForm, ProfileForm
+from forms import LoginForm, ProfileForm, ChangePasswordForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -50,7 +50,7 @@ class User(UserMixin, db.Model):
     email: Mapped[str] = mapped_column(String(100), unique=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False)
 
-    account = relationship("UserAccount", back_populates="user", uselist=False)
+    account = relationship("UserAccount", back_populates="user", uselist=False, cascade="all, delete-orphan")
 
 
 with app.app_context():
@@ -189,6 +189,65 @@ def profile():
         )
     else:
         abort(403)
+
+
+@app.route('/students')
+@admin_only
+def see_all_students():
+    result = db.session.execute(db.select(User).where(User.status == "student"))
+    students = result.scalars().all()
+    return render_template(
+        "people_list.html",
+        list=students,
+        title="Students"
+    )
+
+
+@app.route('/instructors')
+@admin_only
+def see_all_instructors():
+    result = db.session.execute(db.select(User).where(User.status == "instr"))
+    instructors = result.scalars().all()
+    return render_template(
+        "people_list.html",
+        list=instructors,
+        title="Instructors"
+    )
+
+
+@app.route('/change-password/<int:user_id>', methods=['GET', 'POST'])
+@admin_only
+def change_password(user_id):
+    user_details = db.get_or_404(UserAccount, user_id)
+    user = db.get_or_404(User, user_id)
+    form = ChangePasswordForm()
+
+    if form.validate_on_submit():
+        new_password = form.newPassword.data
+        user_details.password = new_password
+
+        db.session.commit()
+
+        if user.status == "student":
+            return redirect(url_for('see_all_students'))
+        elif user.status == "instr":
+            return redirect(url_for('see_all_instructors'))
+
+    return render_template("change_password.html", form=form)
+
+
+@app.route('/view-profile/<int:user_id>')
+@admin_only
+def view_profile(user_id):
+    user = db.get_or_404(User, user_id)
+
+    return render_template("view_profile.html", user=user)
+
+
+@app.route('/logout', methods=["GET", "POST"])
+def log_out():
+    logout_user()
+    return redirect(url_for('welcome'))
 
 
 if __name__ == '__main__':
