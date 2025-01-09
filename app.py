@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
-from forms import LoginForm, ProfileForm, ChangePasswordForm
+from forms import LoginForm, ProfileForm, ChangePasswordForm, CreateCourseForm, AddStudentToCourseForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -52,6 +52,7 @@ class User(UserMixin, db.Model):
 
     account = relationship("UserAccount", back_populates="user", uselist=False, cascade="all, delete-orphan")
     teaching_course = relationship("Course", back_populates="instructor", cascade="all, delete-orphan")
+    enrollment = relationship("Enrollment", back_populates="student", cascade="all, delete-orphan")
 
 
 class Course(db.Model):
@@ -61,6 +62,17 @@ class Course(db.Model):
     instructor_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("user.id"))
 
     instructor = relationship("User", back_populates="teaching_course")
+    enrollment = relationship("Enrollment", back_populates="course", cascade="all, delete-orphan")
+
+
+class Enrollment(db.Model):
+    __tablename__ = "enrollment"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    course_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("course.id"))
+    student_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("user.id"))
+
+    course = relationship("Course", back_populates="enrollment")
+    student = relationship("User", back_populates="enrollment")
 
 
 with app.app_context():
@@ -265,6 +277,69 @@ def delete_user(user_id):
         return redirect(url_for('see_all_students'))
     elif user.status == "instr":
         return redirect(url_for('see_all_instructors'))
+
+
+@app.route('/courses', methods=["GET", "POST"])
+@admin_only
+def courses():
+    form = CreateCourseForm()
+
+    result = db.session.execute(db.select(User).where(User.status == "instr")).scalars().all()
+    instructors = [(instructor.id, instructor.name) for instructor in result]
+    form.instructor.choices = instructors
+
+    course_list = db.session.execute(db.select(Course)).scalars().all()
+
+    if form.validate_on_submit():
+        chosen_instructor = form.instructor.data
+        course_name = form.name.data
+
+        new_course = Course(name=course_name, instructor_id=chosen_instructor)
+        db.session.add(new_course)
+        db.session.commit()
+
+        return redirect(url_for("courses"))
+
+    return render_template("courses.html", form=form, list=course_list)
+
+
+@app.route('/details_course/<int:course_id>')
+@admin_only
+def see_details_course(course_id):
+    course = db.get_or_404(Course, course_id)
+
+    result = db.session.execute(db.select(Enrollment).where(Enrollment.course_id == course_id)).scalars().all()
+    students_id = [student.student_id for student in result]
+    students = []
+    for s_id in students_id:
+        student = db.get_or_404(User, s_id)
+        students.append(student)
+
+    instructor = db.get_or_404(User, course.instructor_id)
+
+    return render_template("see_details_course.html", title=course.name, students=students, instructor=instructor.name)
+
+
+@app.route('/add_student_to_course/<int:course_id>', methods=["GET", "POST"])
+@admin_only
+def add_student_to_course(course_id):
+    form = AddStudentToCourseForm()
+    course = db.get_or_404(Course, course_id)
+
+    enrolled_students_ids = db.session.execute(db.select(Enrollment.student_id).where(Enrollment.course_id == course_id)).scalars().all()
+    available_students = db.session.execute(db.select(User).where(User.status == "student", User.id.not_in(enrolled_students_ids))).scalars().all()
+
+    form.student.choices = [(student.id, student.name) for student in available_students]
+
+    if form.validate_on_submit():
+        chosen_student = form.student.data
+        new_enrollment = Enrollment(course_id=course_id, student_id=chosen_student)
+        db.session.add(new_enrollment)
+        db.session.commit()
+
+        return redirect(url_for("courses"))
+
+    return render_template("add_student_to_course.html", form=form, title=course.name)
 
 
 @app.route('/logout', methods=["GET", "POST"])

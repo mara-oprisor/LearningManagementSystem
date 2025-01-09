@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Email, Regexp, EqualTo
 from flask_ckeditor import CKEditorField
 
@@ -23,3 +23,14 @@ class ChangePasswordForm(FlaskForm):
     newPassword = PasswordField("New Password", validators=[DataRequired()])
     repeatNewPassword = PasswordField("Repeat Password", validators=[DataRequired(), EqualTo('newPassword', message="Passwords must match")])
     submit = SubmitField("Change Password")
+
+
+class CreateCourseForm(FlaskForm):
+    name = StringField("Name of the Course", validators=[DataRequired()])
+    instructor = SelectField("Instructor", coerce=int, validators=[DataRequired()])
+    submit = SubmitField("Create Course")
+
+
+class AddStudentToCourseForm(FlaskForm):
+    student = SelectField("Student", coerce=int, validators=[DataRequired()])
+    submit = SubmitField("Add Student to Course")

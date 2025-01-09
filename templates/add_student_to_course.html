@@ -1,0 +1,19 @@
+{% from "bootstrap5/form.html" import render_form %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Add Student to Course</title>
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="box bg-white rounded-4 shadow p-4 text-center" style="width: 500px;">
+            <h1>Add Student to Course "{{ title }}"</h1>
+            {{ render_form(form) }}
+        </div>
+    </div>
+</body>
+</html>
