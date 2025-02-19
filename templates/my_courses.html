@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>My Courses</title>
+</head>
+<body>
+{% include "header_student.html" %}
+<div class="container mt-4">
+    <h1 class="text-center">My Courses</h1>
+
+    {% for data in courses %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2>{{ data.course.name }}</h2>
+        </div>
+        <div class="card-body">
+            <h4>Materials</h4>
+            {% if data.materials %}
+            <ul style="list-style-type: none">
+                {% for material in data.materials %}
+                <li>
+                    <a href="{{ url_for('serve_file', course_id=material.course_id, filename=material.file_name) }}" target="_blank">
+                        {{ material.file_name }}
+                    </a>
+                    {% if material.description %}
+                    - {{ material.description }}
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No materials uploaded for this course.</p>
+            {% endif %}
+
+            <h4>Assignments</h4>
+            {% if data.assignments %}
+            <ul>
+                {% for assignment in data.assignments %}
+                <li>
+                    <strong>{{ assignment.title }}</strong> - {{ assignment.text }}
+                    <br>
+                    {% if assignment.file_name %}
+                    <a href="{{ url_for('serve_file', course_id=material.course_id, filename=material.file_name) }}"
+                       target="_blank">
+                        {{ material.file_name }}
+                    </a>
+                    {% endif %}
+                    <br>
+                    Due: {{ assignment.deadline }}
+                    {% if assignment.is_late %}
+                    <span class="badge bg-danger">Late</span>
+                    {% endif %}
+                    <br>
+                    {% if assignment.is_done %}
+                    <span class="badge bg-success">Completed</span>
+                    {% else %}
+                    <a href="{{ url_for('solve_assignment', assignment_id=assignment.id) }}"
+                       class="btn btn-primary btn-sm mt-2">
+                        Solve Assignment
+                    </a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted">No assignments for this course.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</body>
+</html>

@@ -27,13 +27,10 @@
                         <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">My Courses</a>
+                        <a class="nav-link" href="{{ url_for('my_courses') }}">My Courses</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Assignments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Grades</a>
+                        <a class="nav-link" href="{{ url_for('view_grades') }}">Grades</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>

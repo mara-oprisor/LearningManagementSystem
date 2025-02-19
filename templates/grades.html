@@ -1,0 +1,52 @@
+{% from "bootstrap5/form.html" import render_form %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Grades</title>
+</head>
+<body>
+    {% include "header_student.html" %}
+    <div class="container mt-4">
+        <h1 class="text-center">My Grades</h1>
+        
+        {% if grades %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Assignment</th>
+                    <th>Grade</th>
+                    <th>Submission</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in grades %}
+                <tr>
+                    <td>{{ grade.course_name }}</td>
+                    <td>{{ grade.assignment_title }}</td>
+                    <td>{{ grade.grade }}</td>
+                    <td>
+                        {% if grade.submission.content %}
+                        <p>{{ grade.submission.content }}</p>
+                        {% elif grade.submission.file_name %}
+                        <a href="{{ url_for('static', filename=grade.submission.file_path) }}" target="_blank">
+                            {{ grade.submission.file_name }}
+                        </a>
+                        {% else %}
+                        <span class="text-muted">No submission</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted text-center">No grades available yet.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
