@@ -56,4 +56,5 @@ The Learning Management System (LMS) is designed to streamline the management of
 
 ## Screenshots of the UI
 
-- 
+![image](https://github.com/user-attachments/assets/d51f455b-7dc5-4778-8bf9-06a78c2f5876)
+
