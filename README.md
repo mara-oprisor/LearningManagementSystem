@@ -9,7 +9,7 @@ A full-stack web application built with Python Flask, HTML, CSS, and Bootstrap t
 - [Overview](#overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Screenshots of the UI](#screenshots)
+- [Screenshots of the UI](#screenshots-of-the-ui)
 
 ---
 
@@ -57,4 +57,6 @@ The Learning Management System (LMS) is designed to streamline the management of
 ## Screenshots of the UI
 
 ![image](https://github.com/user-attachments/assets/d51f455b-7dc5-4778-8bf9-06a78c2f5876)
+
+![image](https://github.com/user-attachments/assets/c3814a9b-c4d9-4ff8-971d-e0a58d2542c3)
 
