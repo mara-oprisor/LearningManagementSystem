@@ -9,6 +9,7 @@ A full-stack web application built with Python Flask, HTML, CSS, and Bootstrap t
 - [Overview](#overview)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
+- [Screenshots of the UI](#screenshots-of-the-ui)
 
 ---
 
